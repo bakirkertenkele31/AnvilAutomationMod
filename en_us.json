@@ -1,0 +1,38 @@
+package com.anvilautomation.key;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class KeyManager {
+
+    private static final KeyManager INSTANCE = new KeyManager();
+    public static KeyManager getInstance() { return INSTANCE; }
+
+    // Geçerli lisans anahtarları buraya eklenebilir
+    private static final Set<String> VALID_KEYS = new HashSet<>();
+    static {
+        VALID_KEYS.add("Kowalski-SensizKalamam");
+        // Daha fazla anahtar eklemek için buraya yaz:
+        // VALID_KEYS.add("Kowalski-XXXXX");
+    }
+
+    private boolean activated = false;
+    private String  activeKey = "";
+
+    public boolean activate(String key) {
+        if (VALID_KEYS.contains(key.trim())) {
+            activated = true;
+            activeKey = key.trim();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isActivated() { return activated; }
+
+    /** Anahtarın maskelenmiş hali: ilk 8 karakter + *** */
+    public String getMaskedKey() {
+        if (activeKey.length() <= 8) return "***";
+        return activeKey.substring(0, 8) + "***";
+    }
+}
